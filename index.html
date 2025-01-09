@@ -63,6 +63,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#credits" class="nav-link">Credits</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -78,6 +82,9 @@ Out python script has requires some imput files and prints and creates some outp
 <h2 id="prerequisites">Prerequisites</h2>
 <p>This workbook is meant for a quick life demo, hence it may be better to just follow. Yet if you want to take the challange. Please make sure your machine is set up. </p>
 <p>Install Docker on your local computer and create an account on <a href="https://hub.docker.com/">dockerhub</a>. You can find instructions <a href="https://docs.docker.com/get-started/get-docker/">here</a>. Note that you need admin rights to install and use Docker, and if you are installing Docker on Windows, you need a recent Windows version. </p>
+<p>Please also login into your docker hub account in the Docker GUI or with </p>
+<pre><code>docker login
+</code></pre>
 <details>
 <summary>If working on Windows</summary>
 
@@ -94,9 +101,27 @@ During the course exercises you will be mainly interacting with docker through t
 - We do some Output Formating with a cool, but uselless tool called <em>figlet</em>. You'll see.
 - We save the result, to the output file and console.</p>
 <h3 id="make-a-docker-out-of-it">Make a docker out of it.</h3>
-<pre><code>docker build -t beatenberg .
+<p>Make sure you are in the root directory of this project.</p>
+<pre><code>docker build .
 </code></pre>
-<p>What just happend? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology.</p></div>
+<p>What just happend? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology. This command be default looks in the current directory for the container <em>Manifest</em>, for Dockers the <em>Dockerfile</em>. It contains all the instructions to make the image. The above command did just that. It build the image given the instructions in the manifest. So where is the image ? We'll it's not a file you see. But you can check for it with:</p>
+<pre><code>docker image list
+</code></pre>
+<p>Let's properly name out container now.</p>
+<pre><code>docker build -t beatenberg:v1 .
+</code></pre>
+<p>Let's check again </p>
+<pre><code>docker image list
+</code></pre>
+<p>Now you should see your container with a tag in the list.</p>
+<p>Let's check the input and output files in 
+<code>in/input.csv</code> and <code>out/output.txt</code>.</p>
+<p>Let's now run the docker locally. Because we have input and output files we need to mount these directories. As a container isolates the your applicaiton with seeminly its own operating system and file system. To get data in and out your need to mount. We already saw which are the directories used inside of the container. Next we define their equivalent outside of the container and run it. The next command takes the image we just reated an makes a container out of it.</p>
+<pre><code>docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
+</code></pre>
+<p>Woha, this worked. And its's quite useless. This gets useful if your installation is compicated or unreliable across machines.</p>
+<h2 id="credits">Credits</h2>
+<p>This mini course is a desitilate and derivatieve of the Swiss Instirute of Bioinformatics course called <a href="https://sib-swiss.github.io/containers-snakemake-training/latest/course_material/day1/introduction_containers/">Introduction to Containers and Snakemake</a>.</p></div>
             </div>
         </div>
 
@@ -178,5 +203,5 @@ During the course exercises you will be mainly interacting with docker through t
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-01-09 13:36:05.660548+00:00
+Build Date UTC : 2025-01-09 13:59:42.339888+00:00
 -->
