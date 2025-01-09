@@ -14,7 +14,7 @@ def main():
     ### Heavy computation
     result = np.sum(data)
 
-    ### Data Wrangling / Formatting (totally useless)
+    ### Output Wrangling / Formatting (totally useless)
     summation = " + ".join([str(x) for x in data])
     ascii_banner = figlet.figlet_format(summation + f" = {result}")
 
