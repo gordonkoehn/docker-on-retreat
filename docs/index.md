@@ -2,8 +2,8 @@
 
 This document and repo has a minimal viable example of how to develop a python application containerized/dockerized locally and run it on the cluster.
 
-We have a small python script that relies on a few dependenceies installed via _Conda_.
-Out python script has requires some imput files and prints and creates some output.
+We have a small python script that relies on a few dependencies installed via _Conda_.
+Our python script requires some input files and prints and creates some output.
 
 A typical flow of a scientific investigation.
 
@@ -30,11 +30,11 @@ During the course exercises you will be mainly interacting with docker through t
 ## Creating your Program.
 
 Our example program is in `src/main.py`. Let's check it out:
-- We import some libaries, supported by our virtual envrioment manager _Conda_. See `environment.yml`.
+- We import some libraries, supported by our virtual environment manager _Conda_. See `environment.yml`.
 - We get out input and output paths.
 - We import the data. Two float numbers.
 - We do some heavy computation with _numpy_.
-- We do some Output Formating with a cool, but uselless tool called _figlet_. You'll see.
+- We do some Output Formating with a cool, but useless tool called _figlet_. You'll see.
 - We save the result, to the output file and console.
 
 ### Make a docker out of it.
@@ -45,13 +45,13 @@ Make sure you are in the root directory of this project.
 docker build .
 ```
 
-What just happend? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology. This command be default looks in the current directory for the container _Manifest_, for Dockers the _Dockerfile_. It contains all the instructions to make the image. The above command did just that. It build the image given the instructions in the manifest. So where is the image ? We'll it's not a file you see. But you can check for it with:
+What just happened? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology. This command be default looks in the current directory for the container _Manifest_, for Dockers the _Dockerfile_. It contains all the instructions to make the image. The above command did just that. It build the image given the instructions in the manifest. So where is the image ? We'll it's not a file you see. But you can check for it with:
 
 ```
 docker image list
 ```
 
-Let's properly name out container now. But before take care if you have..
+Let's properly name our container now. But before take care if you have..
 <details>
 <summary>If using an Apple M chip (newer Macs)</summary>
 
@@ -132,7 +132,7 @@ docker tag beatenberg:v1 [USER NAME]/beatenberg:v1
 docker push [USER NAME]/beatenberg:v1
 ```
 
-So you just shared your image wiht the world.
+So you just shared your image with the world.
 
 ### Let's run it on the cluster
 
@@ -140,7 +140,7 @@ On a cluster there is no container runtime engine, hence we cannot use _docker_,
 
 Apptainer can take several image formats (e.g. a docker image), and convert them into it’s own .sif format. Unlike docker this image doesn’t live in a local image cache, but it’s stored as an actual file.
 
-We can get our image from _dockerhub_ wiht:
+We can get our image from _dockerhub_ with:
 
 ```
 apptainer pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
@@ -219,4 +219,4 @@ So let's use something simpler:
 
 ## Credits
 
-This mini course is a desitilate and derivatieve of the Swiss Instirute of Bioinformatics course called [Introduction to Containers and Snakemake](https://sib-swiss.github.io/containers-snakemake-training/latest/course_material/day1/introduction_containers/).
+This mini course is a distillate and derivatieve of the Swiss Institute of Bioinformatics course called [Introduction to Containers and Snakemake](https://sib-swiss.github.io/containers-snakemake-training/latest/course_material/day1/introduction_containers/).
