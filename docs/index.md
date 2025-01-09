@@ -88,12 +88,6 @@ Let's now run the docker locally. Because we have input and output files we need
 docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
 ```
 
-To be explicit we need to pass the `.env` file, here we just relied on the defaults.
-
-```
-docker run --env-file .env -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
-```
-
 Woha, this worked. And it's quite useful. This gets useful if your installation is complicated or unreliable across machines.
 
 Note that this container just runs and exits, that's usually what we want on a cluster.
@@ -172,7 +166,56 @@ ls
 Look there is the `.sif`, this is the image in apptainer format.
 
 
+Getting the Image uploaded and download it to euler may take while, so let's use a smaller image: 
+
+````
+apptainer pull docker://geertvangeest/ubuntu-figlet:v3
+````
+
+and then to run it.
+
+```
+./ubuntu-figlet_v3.sif
+```
+
+Back to out big image.
+
+
 Apptainer is also different from Docker in the way it handles mounting. By default, Apptainer binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.
+
+```
+apptainer exec --bind /my/dir/to/mount/ [IMAGE NAME].sif [COMMAND]
+```
+
+so for us 
+
+```
+apptainer exec --bind /my/dir/to/mount/ [IMAGE NAME].sif [COMMAND]
+```
+
+These .sif files can be run as standalone executables:
+
+```
+./beatenberg_v1.sif
+```
+
+This is shorthand for:
+
+```
+apptainer run beatenberg_v1.sif
+```
+
+But let us just run this one command to do it all.
+
+```
+apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/out beatenberg_v1.sif python /app/main.py
+````
+
+We will skip running our full program as this creating of apptrainer can take a while.
+
+So let's use something simpler:
+
+
 
 ## Credits
 
