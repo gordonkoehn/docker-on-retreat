@@ -106,11 +106,13 @@ In another terminal, let's see this container:
 
 ```
 docker ps
-````
+```
+
 It shows information about the containers that are currently running, including their container ID, image, command, creation time, status, ports, and names. 
 
 
 To see all containers, including those that are stopped, you can use the -a flag:
+
 ```
 docker ps -a
 ```
