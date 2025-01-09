@@ -51,7 +51,19 @@ What just happend? This command refers to the Docker Engine, the Runtime engine 
 docker image list
 ```
 
-Let's properly name out container now.
+Let's properly name out container now. But before take care if you have..
+<details>
+<summary>If using an Apple M chip (newer Macs)</summary>
+
+If you are using a computer with an Apple M chip, you have the less common ARM system architecture, which can limit transferability of images to (more common) x86_64/AMD64 machines. When building images on a Mac with an M chip (especially if you have sharing in mind), it’s best to set the DOCKER_DEFAULT_PLATFORM to linux/amd64 with:
+
+```
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+```
+
+This is unfortunate currently, but containers protect us for any issues with operating systems but the chip-set may still cause issues, so it's best to use the default. Especially because clusters won't use ARM chips. Clusters are not optimized for energy efficiency that way.
+
+</details>
 
 ```
 docker build -t beatenberg:v1 .
@@ -94,10 +106,73 @@ Let's look inside for context.
 docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out -it beatenberg:v1 /bin/bash
 ```
 
-There is our applciaiton. And look its ubuntu.
+There is our application. And look its ubuntu.
+
+In another terminal, let's see this container:
+
+```
+docker ps
+````
+It shows information about the containers that are currently running, including their container ID, image, command, creation time, status, ports, and names. 
 
 
+To see all containers, including those that are stopped, you can use the -a flag:
+```
+docker ps -a
+```
 
+### Let's share the image
+
+Now we will share the image to dockerhub. If you haven't already you have to login to your dockerhub account with:
+
+```
+docker login
+```
+
+Now that we have created our first own docker image, we can store it and share it with the world on docker hub. Before we get there, we first have to (re)name and tag it.
+
+Before pushing an image to dockerhub, docker has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: user/imagename. We can rename an image with docker tag (which is a bit of misleading name for the command). So we could push to dockerhub like this:
+
+```
+docker tag beatenberg:v1 [USER NAME]/beatenberg:v1
+docker push [USER NAME]/beatenberg:v1
+```
+
+So you just shared your image wiht the world.
+
+### Let's run it on the cluster
+
+On a cluster there is no container runtime engine, hence we cannot use _docker_, but instead we are going to use _apptainer_.
+
+Apptainer can take several image formats (e.g. a docker image), and convert them into it’s own .sif format. Unlike docker this image doesn’t live in a local image cache, but it’s stored as an actual file.
+
+We can get our image from _dockerhub_ wiht:
+
+```
+apptainer pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
+```
+
+so 
+
+```
+apptainer pull docker://[USER NAME]/beatenberg:v1
+```
+
+if you got stuck just use mine:
+
+```
+apptainer pull docker://gordonkoehn/beatenberg:v1
+```
+
+Let's have a look:
+
+```
+ls
+```
+Look there is the `.sif`, this is the image in apptainer format.
+
+
+Apptainer is also different from Docker in the way it handles mounting. By default, Apptainer binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.
 
 ## Credits
 
