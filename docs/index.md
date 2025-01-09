@@ -106,7 +106,7 @@ In another terminal, let's see this container:
 
 ```
 docker ps
-````
+```
 It shows information about the containers that are currently running, including their container ID, image, command, creation time, status, ports, and names. 
 
 
@@ -168,9 +168,9 @@ Look there is the `.sif`, this is the image in apptainer format.
 
 Getting the Image uploaded and download it to euler may take while, so let's use a smaller image: 
 
-````
+```
 apptainer pull docker://geertvangeest/ubuntu-figlet:v3
-````
+```
 
 and then to run it.
 
@@ -209,7 +209,7 @@ But let us just run this one command to do it all.
 
 ```
 apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/out beatenberg_v1.sif python /app/main.py
-````
+```
 
 We will skip running our full program as this creating of apptrainer can take a while.
 
