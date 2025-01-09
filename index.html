@@ -192,9 +192,8 @@ docker push [USER NAME]/beatenberg:v1
 <pre><code>apptainer run beatenberg_v1.sif
 </code></pre>
 <p>But let us just run this one command to do it all.</p>
-<p>```
-apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/out beatenberg_v1.sif python /app/main.py
-````</p>
+<pre><code>apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/out beatenberg_v1.sif python /app/main.py
+</code></pre>
 <p>We will skip running our full program as this creating of apptrainer can take a while.</p>
 <p>So let's use something simpler:</p>
 <h2 id="credits">Credits</h2>
@@ -280,5 +279,5 @@ apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/o
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-01-09 16:52:21.745611+00:00
+Build Date UTC : 2025-01-09 16:56:41.623202+00:00
 -->
