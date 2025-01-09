@@ -3,9 +3,13 @@
 import os
 import numpy as np
 import pyfiglet as figlet
+from dotenv import load_dotenv
 
-input_fp = os.environ.get("INPUT_FP", "in/input.csv")
-output_fp = os.environ.get("OUTPUT_FP", "out/output.txt")
+# Load environment variables from .env file
+load_dotenv()
+
+input_fp = os.getenv("INPUT_FP", "in/input.csv")
+output_fp = os.getenv("OUTPUT_FP", "out/output.txt")
 
 def main():
     ### Load the data
