@@ -69,14 +69,32 @@ Now you should see your container with a tag in the list.
 Let's check the input and output files in 
 `in/input.csv` and `out/output.txt`.
 
-Let's now run the docker locally. Because we have input and output files we need to mount these directories. As a container isolates the your applicaiton with seeminly its own operating system and file system. To get data in and out your need to mount. We already saw which are the directories used inside of the container. Next we define their equivalent outside of the container and run it. The next command takes the image we just reated an makes a container out of it.
+Let's now run the docker locally. Because we have input and output files we need to mount these directories. As a container isolates your application with seemingly its own operating system and file system. To get data in and out, you need to mount. We already saw which are the directories used inside of the container. Next, we define their equivalent outside of the container and run it. The next command takes the image we just created and makes a container out of it.
 
-````
+
+```
 docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
-````
+```
 
-Woha, this worked. And its's quite useless. This gets useful if your installation is compicated or unreliable across machines.
+To be explicit we need to pass the `.env` file, here we just relied on the defaults.
 
+```
+docker run --env-file .env -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
+```
+
+Woha, this worked. And it's quite useful. This gets useful if your installation is complicated or unreliable across machines.
+
+Note that this container just runs and exits, that's usually what we want on a cluster.
+
+
+
+Let's look inside for context.
+
+```
+docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out -it beatenberg:v1 /bin/bash
+```
+
+There is our applciaiton. And look its ubuntu.
 
 
 
