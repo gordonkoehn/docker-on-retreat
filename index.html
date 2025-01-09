@@ -76,8 +76,8 @@
 
 <h1 id="welcome-to-docker-on-retreat">Welcome to Docker on Retreat</h1>
 <p>This document and repo has a minimal viable example of how to develop a python application containerized/dockerized locally and run it on the cluster.</p>
-<p>We have a small python script that relies on a few dependenceies installed via <em>Conda</em>.
-Out python script has requires some imput files and prints and creates some output.</p>
+<p>We have a small python script that relies on a few dependencies installed via <em>Conda</em>.
+Our python script requires some input files and prints and creates some output.</p>
 <p>A typical flow of a scientific investigation.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>This workbook is meant for a quick life demo, hence it may be better to just follow. Yet if you want to take the challange. Please make sure your machine is set up. </p>
@@ -94,20 +94,20 @@ During the course exercises you will be mainly interacting with docker through t
 
 <h2 id="creating-your-program">Creating your Program.</h2>
 <p>Our example program is in <code>src/main.py</code>. Let's check it out:
-- We import some libaries, supported by our virtual envrioment manager <em>Conda</em>. See <code>environment.yml</code>.
+- We import some libraries, supported by our virtual environment manager <em>Conda</em>. See <code>environment.yml</code>.
 - We get out input and output paths.
 - We import the data. Two float numbers.
 - We do some heavy computation with <em>numpy</em>.
-- We do some Output Formating with a cool, but uselless tool called <em>figlet</em>. You'll see.
+- We do some Output Formating with a cool, but useless tool called <em>figlet</em>. You'll see.
 - We save the result, to the output file and console.</p>
 <h3 id="make-a-docker-out-of-it">Make a docker out of it.</h3>
 <p>Make sure you are in the root directory of this project.</p>
 <pre><code>docker build .
 </code></pre>
-<p>What just happend? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology. This command be default looks in the current directory for the container <em>Manifest</em>, for Dockers the <em>Dockerfile</em>. It contains all the instructions to make the image. The above command did just that. It build the image given the instructions in the manifest. So where is the image ? We'll it's not a file you see. But you can check for it with:</p>
+<p>What just happened? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology. This command be default looks in the current directory for the container <em>Manifest</em>, for Dockers the <em>Dockerfile</em>. It contains all the instructions to make the image. The above command did just that. It build the image given the instructions in the manifest. So where is the image ? We'll it's not a file you see. But you can check for it with:</p>
 <pre><code>docker image list
 </code></pre>
-<p>Let's properly name out container now. But before take care if you have..</p>
+<p>Let's properly name our container now. But before take care if you have..</p>
 <details>
 <summary>If using an Apple M chip (newer Macs)</summary>
 
@@ -141,63 +141,102 @@ This is unfortunate currently, but containers protect us for any issues with ope
 <p>There is our application. And look its ubuntu.</p>
 <p>In another terminal, let's see this container:</p>
 <pre><code>docker ps
+````
+It shows information about the containers that are currently running, including their container ID, image, command, creation time, status, ports, and names. 
+
+
+To see all containers, including those that are stopped, you can use the -a flag:
 </code></pre>
-<p>It shows information about the containers that are currently running, including their container ID, image, command, creation time, status, ports, and names. </p>
-<p>To see all containers, including those that are stopped, you can use the -a flag:</p>
-<pre><code>docker ps -a
+<p>docker ps -a</p>
+<pre><code>
+### Let's share the image
+
+Now we will share the image to dockerhub. If you haven't already you have to login to your dockerhub account with:
+
 </code></pre>
-<h3 id="lets-share-the-image">Let's share the image</h3>
-<p>Now we will share the image to dockerhub. If you haven't already you have to login to your dockerhub account with:</p>
-<pre><code>docker login
+<p>docker login</p>
+<pre><code>
+Now that we have created our first own docker image, we can store it and share it with the world on docker hub. Before we get there, we first have to (re)name and tag it.
+
+Before pushing an image to dockerhub, docker has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: user/imagename. We can rename an image with docker tag (which is a bit of misleading name for the command). So we could push to dockerhub like this:
+
 </code></pre>
-<p>Now that we have created our first own docker image, we can store it and share it with the world on docker hub. Before we get there, we first have to (re)name and tag it.</p>
-<p>Before pushing an image to dockerhub, docker has to know to which user and which repository the image should be added. That information should be in the name of the image, like this: user/imagename. We can rename an image with docker tag (which is a bit of misleading name for the command). So we could push to dockerhub like this:</p>
-<pre><code>docker tag beatenberg:v1 [USER NAME]/beatenberg:v1
-docker push [USER NAME]/beatenberg:v1
+<p>docker tag beatenberg:v1 [USER NAME]/beatenberg:v1
+docker push [USER NAME]/beatenberg:v1</p>
+<pre><code>
+So you just shared your image with the world.
+
+### Let's run it on the cluster
+
+On a cluster there is no container runtime engine, hence we cannot use _docker_, but instead we are going to use _apptainer_.
+
+Apptainer can take several image formats (e.g. a docker image), and convert them into it’s own .sif format. Unlike docker this image doesn’t live in a local image cache, but it’s stored as an actual file.
+
+We can get our image from _dockerhub_ with:
+
 </code></pre>
-<p>So you just shared your image wiht the world.</p>
-<h3 id="lets-run-it-on-the-cluster">Let's run it on the cluster</h3>
-<p>On a cluster there is no container runtime engine, hence we cannot use <em>docker</em>, but instead we are going to use <em>apptainer</em>.</p>
-<p>Apptainer can take several image formats (e.g. a docker image), and convert them into it’s own .sif format. Unlike docker this image doesn’t live in a local image cache, but it’s stored as an actual file.</p>
-<p>We can get our image from <em>dockerhub</em> wiht:</p>
-<pre><code>apptainer pull docker://[USER NAME]/[IMAGE NAME]:[TAG]
+<p>apptainer pull docker://[USER NAME]/[IMAGE NAME]:[TAG]</p>
+<pre><code>
+so 
+
 </code></pre>
-<p>so </p>
-<pre><code>apptainer pull docker://[USER NAME]/beatenberg:v1
+<p>apptainer pull docker://[USER NAME]/beatenberg:v1</p>
+<pre><code>
+if you got stuck just use mine:
+
 </code></pre>
-<p>if you got stuck just use mine:</p>
-<pre><code>apptainer pull docker://gordonkoehn/beatenberg:v1
+<p>apptainer pull docker://gordonkoehn/beatenberg:v1</p>
+<pre><code>
+Let's have a look:
+
 </code></pre>
-<p>Let's have a look:</p>
-<pre><code>ls
+<p>ls</p>
+<pre><code>Look there is the `.sif`, this is the image in apptainer format.
+
+
+Getting the Image uploaded and download it to euler may take while, so let's use a smaller image: 
+
+````
+apptainer pull docker://geertvangeest/ubuntu-figlet:v3
+````
+
+and then to run it.
+
 </code></pre>
-<p>Look there is the <code>.sif</code>, this is the image in apptainer format.</p>
-<p>Getting the Image uploaded and download it to euler may take while, so let's use a smaller image: </p>
-<pre><code>apptainer pull docker://geertvangeest/ubuntu-figlet:v3
+<p>./ubuntu-figlet_v3.sif</p>
+<pre><code>
+Back to our big image.
+
+
+Apptainer is also different from Docker in the way it handles mounting. By default, Apptainer binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.
+
 </code></pre>
-<p>and then to run it.</p>
-<pre><code>./ubuntu-figlet_v3.sif
+<p>apptainer exec --bind /my/dir/to/mount/ [IMAGE NAME].sif [COMMAND]</p>
+<pre><code>
+so for us 
+
 </code></pre>
-<p>Back to out big image.</p>
-<p>Apptainer is also different from Docker in the way it handles mounting. By default, Apptainer binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.</p>
-<pre><code>apptainer exec --bind /my/dir/to/mount/ [IMAGE NAME].sif [COMMAND]
+<p>apptainer exec --bind /my/dir/to/mount/ [IMAGE NAME].sif [COMMAND]</p>
+<pre><code>
+These .sif files can be run as standalone executables:
+
 </code></pre>
-<p>so for us </p>
-<pre><code>apptainer exec --bind /my/dir/to/mount/ [IMAGE NAME].sif [COMMAND]
+<p>./beatenberg_v1.sif</p>
+<pre><code>
+This is shorthand for:
+
 </code></pre>
-<p>These .sif files can be run as standalone executables:</p>
-<pre><code>./beatenberg_v1.sif
+<p>apptainer run beatenberg_v1.sif</p>
+<pre><code>
+But let us just run this one command to do it all.
+
 </code></pre>
-<p>This is shorthand for:</p>
-<pre><code>apptainer run beatenberg_v1.sif
-</code></pre>
-<p>But let us just run this one command to do it all.</p>
-<pre><code>apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/out beatenberg_v1.sif python /app/main.py
-</code></pre>
+<p>apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/out beatenberg_v1.sif python /app/main.py
+````</p>
 <p>We will skip running our full program as this creating of apptrainer can take a while.</p>
 <p>So let's use something simpler:</p>
 <h2 id="credits">Credits</h2>
-<p>This mini course is a desitilate and derivatieve of the Swiss Instirute of Bioinformatics course called <a href="https://sib-swiss.github.io/containers-snakemake-training/latest/course_material/day1/introduction_containers/">Introduction to Containers and Snakemake</a>.</p></div>
+<p>This mini course is a distillate and derivatieve of the Swiss Institute of Bioinformatics course called <a href="https://sib-swiss.github.io/containers-snakemake-training/latest/course_material/day1/introduction_containers/">Introduction to Containers and Snakemake</a>.</p></div>
             </div>
         </div>
 
@@ -279,5 +318,5 @@ docker push [USER NAME]/beatenberg:v1
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-01-09 16:56:41.623202+00:00
+Build Date UTC : 2025-01-09 17:01:21.901227+00:00
 -->
