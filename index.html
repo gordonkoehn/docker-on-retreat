@@ -116,10 +116,18 @@ During the course exercises you will be mainly interacting with docker through t
 <p>Now you should see your container with a tag in the list.</p>
 <p>Let's check the input and output files in 
 <code>in/input.csv</code> and <code>out/output.txt</code>.</p>
-<p>Let's now run the docker locally. Because we have input and output files we need to mount these directories. As a container isolates the your applicaiton with seeminly its own operating system and file system. To get data in and out your need to mount. We already saw which are the directories used inside of the container. Next we define their equivalent outside of the container and run it. The next command takes the image we just reated an makes a container out of it.</p>
+<p>Let's now run the docker locally. Because we have input and output files we need to mount these directories. As a container isolates your application with seemingly its own operating system and file system. To get data in and out, you need to mount. We already saw which are the directories used inside of the container. Next, we define their equivalent outside of the container and run it. The next command takes the image we just created and makes a container out of it.</p>
 <pre><code>docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
 </code></pre>
-<p>Woha, this worked. And its's quite useless. This gets useful if your installation is compicated or unreliable across machines.</p>
+<p>To be explicit we need to pass the <code>.env</code> file, here we just relied on the defaults.</p>
+<pre><code>docker run --env-file .env -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
+</code></pre>
+<p>Woha, this worked. And it's quite useful. This gets useful if your installation is complicated or unreliable across machines.</p>
+<p>Note that this container just runs and exits, that's usually what we want on a cluster.</p>
+<p>Let's look inside for context.</p>
+<pre><code>docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out -it beatenberg:v1 /bin/bash
+</code></pre>
+<p>There is our applciaiton. And look its ubuntu.</p>
 <h2 id="credits">Credits</h2>
 <p>This mini course is a desitilate and derivatieve of the Swiss Instirute of Bioinformatics course called <a href="https://sib-swiss.github.io/containers-snakemake-training/latest/course_material/day1/introduction_containers/">Introduction to Containers and Snakemake</a>.</p></div>
             </div>
@@ -203,5 +211,5 @@ During the course exercises you will be mainly interacting with docker through t
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-01-09 13:59:42.339888+00:00
+Build Date UTC : 2025-01-09 14:33:03.735827+00:00
 -->
