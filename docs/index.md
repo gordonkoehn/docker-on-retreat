@@ -209,7 +209,7 @@ But let us just run this one command to do it all.
 
 ```
 apptainer exec --env-file .env --bind $(pwd)/in:/app/in --bind $(pwd)/out:/app/out beatenberg_v1.sif python /app/main.py
-````
+```
 
 We will skip running our full program as this creating of apptrainer can take a while.
 
