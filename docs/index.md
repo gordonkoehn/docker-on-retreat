@@ -178,7 +178,7 @@ and then to run it.
 ./ubuntu-figlet_v3.sif
 ```
 
-Back to out big image.
+Back to our big image.
 
 
 Apptainer is also different from Docker in the way it handles mounting. By default, Apptainer binds your home directory and a number of paths in the root directory to the container. This results in behaviour that is almost like if you are working on the directory structure of the host.
