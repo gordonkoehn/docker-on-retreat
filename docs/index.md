@@ -13,6 +13,13 @@ This workbook is meant for a quick life demo, hence it may be better to just fol
 
 Install Docker on your local computer and create an account on [dockerhub](https://hub.docker.com/). You can find instructions [here](https://docs.docker.com/get-started/get-docker/). Note that you need admin rights to install and use Docker, and if you are installing Docker on Windows, you need a recent Windows version. 
 
+
+Please also login into your docker hub account in the Docker GUI or with 
+
+```
+docker login
+```
+
 <details>
 <summary>If working on Windows</summary>
 
@@ -32,8 +39,48 @@ Our example program is in `src/main.py`. Let's check it out:
 
 ### Make a docker out of it.
 
+Make sure you are in the root directory of this project.
+
 ```
-docker build -t beatenberg .
+docker build .
 ```
 
-What just happend? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology.
+What just happend? This command refers to the Docker Engine, the Runtime engine of this particular containerization technology. This command be default looks in the current directory for the container _Manifest_, for Dockers the _Dockerfile_. It contains all the instructions to make the image. The above command did just that. It build the image given the instructions in the manifest. So where is the image ? We'll it's not a file you see. But you can check for it with:
+
+```
+docker image list
+```
+
+Let's properly name out container now.
+
+```
+docker build -t beatenberg:v1 .
+```
+
+
+Let's check again 
+
+```
+docker image list
+```
+
+Now you should see your container with a tag in the list.
+
+Let's check the input and output files in 
+`in/input.csv` and `out/output.txt`.
+
+Let's now run the docker locally. Because we have input and output files we need to mount these directories. As a container isolates the your applicaiton with seeminly its own operating system and file system. To get data in and out your need to mount. We already saw which are the directories used inside of the container. Next we define their equivalent outside of the container and run it. The next command takes the image we just reated an makes a container out of it.
+
+````
+docker run -v $(pwd)/in:/app/in -v $(pwd)/out:/app/out beatenberg:v1
+````
+
+Woha, this worked. And its's quite useless. This gets useful if your installation is compicated or unreliable across machines.
+
+
+
+
+
+## Credits
+
+This mini course is a desitilate and derivatieve of the Swiss Instirute of Bioinformatics course called [Introduction to Containers and Snakemake](https://sib-swiss.github.io/containers-snakemake-training/latest/course_material/day1/introduction_containers/).
